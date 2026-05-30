@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TINCHLIK Chat</title>
+    <link rel="stylesheet" href="{% static 'css/chat.css' %}">
+</head>
+
+<body>
+
+    <div class="chat-container">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <a href="/" class="home-btn">🏠 Bosh menyu</a>
+            <h2>👥 Online</h2>
+            <div id="users"></div>
+        </div>
+
+        <!-- CHAT BOX -->
+        <div class="chat-box">
+
+            <div class="topbar">
+                💬 TINCHLIK CHAT
+            </div>
+
+            <div class="messages" id="messages">
+            </div>
+
+            <div class="input-box">
+                <input id="msgInput" type="text" placeholder="Xabar yozing...">
+                <button onclick="sendMsg()">Send</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="{% static 'js/chat.js' %}"></script>
+    <script>
+        const input = document.getElementById("msgInput");
+        const messages = document.getElementById("messages");
+
+        // Button bosilganda
+        function sendMsg() {
+            const text = input.value.trim();
+            if (text === "") return;
+
+            addMessage(text, "right");
+
+            input.value = "";
+        }
+
+        // ENTER bosilganda
+        input.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault(); // newline bo‘lmasin
+                sendMsg();
+            }
+        });
+        function addMessage(user, text) {
+            const div = document.createElement("div");
+        }
+
+        // Message qo‘shish funksiyasi
+        function addMessage(text, side) {
+            const div = document.createElement("div");
+            div.classList.add("msg", side);
+            div.innerText = text;
+
+            messages.appendChild(div);
+
+            // avtomatik pastga scroll
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+
+    </script>
+</body>
+
+</html>

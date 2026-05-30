@@ -1,0 +1,19 @@
+function openTab(tabName) {
+    let tabs = document.querySelectorAll(".tab");
+    let buttons = document.querySelectorAll(".menu-btn");
+
+    tabs.forEach(t => t.classList.remove("active"));
+    buttons.forEach(b => b.classList.remove("active"));
+
+    document.getElementById(tabName).classList.add("active");
+    event.target.classList.add("active");
+}
+
+// avatar preview
+document.getElementById("avatarInput").addEventListener("change", function (e) {
+    let reader = new FileReader();
+    reader.onload = function () {
+        document.getElementById("avatarPreview").src = reader.result;
+    }
+    reader.readAsDataURL(e.target.files[0]);
+});

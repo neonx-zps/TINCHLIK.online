@@ -1,0 +1,35 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+}
+
+.box {
+    padding: 50px 50px;
+    border: 1px solid black;
+    width: 190vh;
+    height: 80vh;
+    border-radius: 30px;
+    position: fixed;
+}
+
+img.avatar {
+    border: 1px solid black;
+    width: 130px;
+    height: 130px;
+    border-radius: 10px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 10px;
+}
+
+input #upload {
+    width: 120px;
+}

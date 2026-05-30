@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TINCHLIK SOCIAL PORTAL</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <form method="POST" action="/create-post/"></form>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <div class="navbar">
+
+        <div class="logo">
+            🏘 TINCHLIK
+        </div>
+
+
+        <div class="nav-links">
+            <a href="/">🏠 Home</a>
+            <a href="/news/">📰 News</a>
+            <a href="/chat/">💬 Chat</a>
+            <a href="/profile/">👤 Profile</a>
+
+            {% if user.is_superuser %}
+            <a href="/admin/" class="admin-link">⚙ Admin</a>
+            {% endif %}
+
+            {% for profile in profiles %}
+
+            <a href="#" class="user-box">
+
+                <img src="{{ profile.avatar.url }}"
+                    class="avatar {% if profile.online %}online{% else %}offline{% endif %}">
+
+                <span>
+                    {{ profile.user.username }}
+                </span>
+
+            </a>
+
+            {% endfor %}
+        </div>
+
+        <!-- PROFILE MENU -->
+        <div class="user-box">
+
+            <div class="avatar-btn" onclick="toggleMenu()">
+
+                {% if user.is_authenticated and profile.avatar %}
+                <img src="{{ profile.avatar.url }}" class="nav-avatar">
+                {% else %}
+                <img src="{% static 'img/use.png' %}" class="nav-avatar">
+                {% endif %}
+
+            </div>
+
+            <div id="dropdown" class="dropdown">
+                <a href="/profile/">👤 Kabinet</a>
+                <a href="/sozlamalar/">⚙ Sozlamalar</a>
+                <a href="/logout/">🚪 Chiqish</a>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= MAIN LAYOUT ================= -->
+    <div class="layout">
+
+        <!-- LEFT SIDEBAR (REAL USERS) -->
+        <div class="left">
+
+            <h3>👥 Online Users</h3>
+
+            {% for u in users %}
+            <div class="user-card">
+                <div class="dot"></div>
+                {{ u.user.username }}
+            </div>
+            {% empty %}
+            <p>No users</p>
+            {% endfor %}
+
+            <hr>
+
+
+        </div>
+
+
+        <!-- CENTER FEED (REAL POSTS) -->
+        <div class="center">
+
+            <!-- CREATE POST BOX -->
+            <div class="create-post" onclick="openModal()">
+                ✍ Nima yangilik? Post yozing...
+            </div>
+
+            <div class="news-box">
+                <img src="" alt="" class="new">
+            </div>
+
+
+            <!-- POSTS -->
+            {% for post in posts %}
+
+            <div class="post">
+
+                <div class="post-header">
+
+                    <div class="post-user">
+                        {% if post.user.profile.avatar %}
+                        <img src="{{ post.user.profile.avatar.url }}" class="post-avatar">
+                        {% else %}
+                        <img src="{% static 'img/use.png' %}" class="post-avatar">
+                        {% endif %}
+
+                        <span>{{ post.user.username }}</span>
+                    </div>
+
+                    <div class="post-time">
+                        ⏰ {{ post.created_at|date:"d M Y h:i A" }}
+                    </div>
+
+                </div>
+
+                <div class="post-body">
+                    {{ post.text }}
+                </div>
+
+                <div class="post-actions">
+                    <button>❤️ Like</button>
+                    <button>💬 Comment</button>
+                    <button>↗ Share</button>
+                </div>
+
+            </div>
+
+            {% empty %}
+            <p>No posts yet</p>
+            {% endfor %}
+
+        </div>
+
+
+        <!-- RIGHT PANEL -->
+        <div class="right">
+
+            <h3>📢 Trends</h3>
+
+            <div class="trend">#Tinchlik</div>
+            <div class="trend">#Mahalla</div>
+            <div class="trend">#ChatSystem</div>
+
+            <hr>
+
+            <h3>🔥 Suggestions</h3>
+
+            <div class="suggestion">Yangi userlarni follow qiling</div>
+            <div class="suggestion">Chatga qo‘shiling</div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FLOAT BUTTON ================= -->
+    <div class="float-btn" onclick="openModal()">+</div>
+
+
+    <!-- ================= POST MODAL ================= -->
+    <div id="modal" class="modal">
+
+        <div class="modal-box">
+
+            <h2>Yangi post</h2>
+
+            <form method="POST" action="/create-post/">
+                {% csrf_token %}
+                <textarea name="text" placeholder="Nima yangilik?"></textarea>
+                <button type="submit">Yuborish</button>
+            </form>
+
+            <button onclick="closeModal()">Yopish</button>
+
+        </div>
+
+    </div>
+
+    <div class="down-box">
+        
+    </div>
+
+
+    <!-- ================= JS ================= -->
+    <script>
+
+        function toggleMenu() {
+            let m = document.getElementById("dropdown");
+            m.style.display = m.style.display === "block" ? "none" : "block";
+        }
+
+        function openModal() {
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+        document.addEventListener("click", function (e) {
+            if (!e.target.closest(".user-box")) {
+                document.getElementById("dropdown").style.display = "none";
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
